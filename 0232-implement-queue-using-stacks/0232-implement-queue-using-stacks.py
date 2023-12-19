@@ -7,22 +7,26 @@ class MyQueue:
     def push(self, x: int) -> None:
         self.__push_stack.append(x)
 
-    def __transfer_elements(self):
-        self.__pop_stack.extend(reversed(self.__push_stack))
-        self.__push_stack = []
-        
     def pop(self) -> int:
-        if not self.__pop_stack:
-            self.__transfer_elements()
-        return self.__pop_stack.pop()
+        if self.__pop_stack:
+            return self.__pop_stack.pop()
+        else:
+            while self.__push_stack:
+                temp = self.__push_stack.pop()
+                self.__pop_stack.append(temp)
+            return self.__pop_stack.pop()
 
     def peek(self) -> int:
-        if not self.__pop_stack:
-            self.__transfer_elements()
-        return self.__pop_stack[-1]
+        if self.__pop_stack:
+            return self.__pop_stack[-1]
+        else:
+            while self.__push_stack:
+                temp = self.__push_stack.pop()
+                self.__pop_stack.append(temp)
+            return self.__pop_stack[-1]
 
     def empty(self) -> bool:
-        return not (self.__push_stack or self.__pop_stack)
+        return False if self.__push_stack or self.__pop_stack else True
 
 
 # Your MyQueue object will be instantiated and called as such:
